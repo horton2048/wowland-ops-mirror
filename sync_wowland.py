@@ -20,19 +20,20 @@ import subprocess
 import sys
 import time
 
-# ---------------- 文档清单: wiki 节点 -> (相对目录, 标题) ----------------
+# ---------------- 文档清单: wiki 节点 -> (相对目录, 标题/文件名) ----------------
+# 相对目录以 docs/ 为根; 试营业执行手册沿用远程仓库已有文件名, 保持 raw 链接兼容
 DOCS = [
     # 主节点 1
-    ("DpzZwwMFTiAqBOkBRUAcFiKAnbc", "", "月亮湖WowLand社群招新方案（总）"),
+    ("DpzZwwMFTiAqBOkBRUAcFiKAnbc", "docs", "月亮湖WowLand社群招新方案（总）"),
     # 主节点 1 的子文档
-    ("AFfmwbJbjiJhIqksDWccGyUVncf", "月亮湖WowLand社群招新方案（总）", "个人经历宣讲"),
-    ("OhqbwJzSiiWzbJkTTQ1cOmsCnYe", "月亮湖WowLand社群招新方案（总）", "【北京工业大学WowLand】（建筑工程学院就业专场） 宣讲会方案"),
-    ("TTLMwBia1ibUOdk3vf4cKOaYnNh", "月亮湖WowLand社群招新方案（总）", "校园墙线上推广方案"),
-    ("HjSuwUssYiuXqbk7lMTc7ubFnqh", "月亮湖WowLand社群招新方案（总）", "校园墙招新方案"),
-    ("Du7awSO35iGwgWkzN8Nc1fihnfb", "月亮湖WowLand社群招新方案（总）", "个人自媒体招新方案"),
-    ("KgT5wStHHi5Mvek9az2coqNCnYb", "月亮湖WowLand社群招新方案（总）", "月亮湖WowLand-集中招新方案"),
-    # 主节点 2
-    ("JdscwcN7ji2kCHke3V5chJJWnbe", "", "WowLand社群｜试营业执行手册 Copy"),
+    ("AFfmwbJbjiJhIqksDWccGyUVncf", "docs/月亮湖WowLand社群招新方案（总）", "个人经历宣讲"),
+    ("OhqbwJzSiiWzbJkTTQ1cOmsCnYe", "docs/月亮湖WowLand社群招新方案（总）", "【北京工业大学WowLand】（建筑工程学院就业专场） 宣讲会方案"),
+    ("TTLMwBia1ibUOdk3vf4cKOaYnNh", "docs/月亮湖WowLand社群招新方案（总）", "校园墙线上推广方案"),
+    ("HjSuwUssYiuXqbk7lMTc7ubFnqh", "docs/月亮湖WowLand社群招新方案（总）", "校园墙招新方案"),
+    ("Du7awSO35iGwgWkzN8Nc1fihnfb", "docs/月亮湖WowLand社群招新方案（总）", "个人自媒体招新方案"),
+    ("KgT5wStHHi5Mvek9az2coqNCnYb", "docs/月亮湖WowLand社群招新方案（总）", "月亮湖WowLand-集中招新方案"),
+    # 主节点 2 (文件名沿用远程仓库已有命名)
+    ("JdscwcN7ji2kCHke3V5chJJWnbe", "docs", "试营业执行手册"),
 ]
 
 WIKI_URL = "https://larkcommunity.feishu.cn/wiki/{token}"
@@ -204,7 +205,13 @@ def main():
     readme_lines = [
         "# WowLand Ops Mirror",
         "",
-        "> 飞书知识库 → GitHub 自动镜像仓库。内容由定时任务自动同步, 请勿手动编辑(会被覆盖)。",
+        "> 飞书知识库 → GitHub 自动镜像仓库。飞书为权威编辑源, 本仓库为**公开只读镜像**, 供 Grok Bot / 运营助手拉取最新口径。",
+        "> 内容由定时任务自动同步, 请勿手动编辑(会被覆盖)。",
+        "",
+        "## 官方飞书索引(权威)",
+        "",
+        "1. WowLand社群｜试营业执行手册 Copy — https://larkcommunity.feishu.cn/wiki/JdscwcN7ji2kCHke3V5chJJWnbe",
+        "2. 月亮湖WowLand社群招新方案（总） — https://larkcommunity.feishu.cn/wiki/DpzZwwMFTiAqBOkBRUAcFiKAnbc",
         "",
         "## 文档索引",
         "",
@@ -220,9 +227,15 @@ def main():
         readme_lines.append(line)
     readme_lines += [
         "",
+        "## 机器人读取入口",
+        "",
+        "- 试营业手册 raw: `https://raw.githubusercontent.com/horton2048/wowland-ops-mirror/main/docs/试营业执行手册.md`",
+        "- 招新方案 raw: `https://raw.githubusercontent.com/horton2048/wowland-ops-mirror/main/docs/月亮湖WowLand社群招新方案（总）.md`",
+        "",
         "## 同步信息",
         "",
-        "- 同步范围: 月亮湖WowLand社群招新方案（总）及其全部子文档; WowLand社群｜试营业执行手册 Copy",
+        "- 同步范围: 月亮湖WowLand社群招新方案（总）及其全部 6 个子文档; WowLand社群｜试营业执行手册 Copy",
+        "- 存档保留: `docs/社长手册.md`(历史手动存档, 不在自动同步范围)",
         f"- 最近同步: {time.strftime('%Y-%m-%d %H:%M:%S')}",
     ]
     with open(os.path.join(repo, "README.md"), "w", encoding="utf-8") as f:
