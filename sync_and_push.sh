@@ -23,9 +23,11 @@ echo "[1/3] 同步飞书文档..."
 python3 sync_wowland.py
 
 echo "[2/3] 提交变更..."
-CHANGED="$(git status --porcelain)"
+# 忽略 README/.sync_manifest.json 的时间戳噪音, 仅当文档或资源内容变化时才提交
+CHANGED="$(git status --porcelain | grep -vE '^.. (README\.md|\.sync_manifest\.json)$' || true)"
 if [ -z "$CHANGED" ]; then
-    echo "      无变更, 跳过提交"
+    echo "      无内容变更, 跳过提交"
+    git checkout -- README.md .sync_manifest.json 2>/dev/null || true
 else
     git add -A
     git commit -m "sync: $(date '+%Y-%m-%d %H:%M:%S') from Feishu wiki" >/dev/null 2>&1 || true
